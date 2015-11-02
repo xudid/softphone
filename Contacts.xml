@@ -1,0 +1,8 @@
+<list>
+  <Contact>
+    <contactName> 600</contactName>
+    <sipAddress>sip:600@192.168.0.3</sipAddress>
+    <sipPort>5060</sipPort>
+    <IP>0.0.0.0</IP>
+  </Contact>
+</list>

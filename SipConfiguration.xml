@@ -1,0 +1,3 @@
+<SipConfiguration>
+  <sipListenningPort>5060</sipListenningPort>
+</SipConfiguration>
