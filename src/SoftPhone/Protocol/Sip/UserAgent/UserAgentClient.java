@@ -15,6 +15,7 @@ import SoftPhone.Protocol.Sip.Provider.TransactionsRepository;
 import SoftPhone.Protocol.Sip.Call.CallParticipantInterface;
 import SoftPhone.Protocol.Sip.Call.CallSession;
 import SoftPhone.Protocol.Sip.Provider.RegisterSequence;
+import SoftPhone.Media.MediaController;
 import SoftPhone.Protocol.Sip.*;
 import SoftPhone.Protocol.Sip.Account.SipCredentials;
 import SoftPhone.Protocol.Sip.Message.*;
@@ -27,6 +28,9 @@ import gov.nist.javax.sip.header.CSeq;
 import gov.nist.javax.sip.stack.SIPDialog;
 import gov.nist.javax.sip.stack.SIPTransaction;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.sip.*;
 import javax.sip.address.Address;
 import javax.sip.header.CSeqHeader;
@@ -123,6 +127,8 @@ public class UserAgentClient
                String m =ev.getRequest().getMethod();
                Response response =ev.getResponse();
                long cseqnum =ev.getCseqNum();
+               Logger.getLogger(MediaController.class.getName())
+               .log(Level.INFO, "Error client response code: "+clientErrorCode+"for request: "+ev.getRequest().getMethod());
                switch(clientErrorCode)
                 {
                    case 401:

@@ -23,14 +23,13 @@ import net .java.stun4j.client.*;
 import java.util.*;
 import java.util.logging.*;
 
+import SoftPhone.Configuration.Media.JavaSoundDetector;
+import SoftPhone.Configuration.Media.MediaDeviceDetector;
 import SoftPhone.Network.NetworkIface;
 
 public class NetworkConfiguration {
-    private NetworkIface prefferedNetworkInterface=null;
-   
-   
-   
-    private InetAddress localaddress;
+	private static final Logger logger = Logger.getLogger(JavaSoundDetector.class.getName());
+    private NetworkIface prefferedNetworkInterface=null;private InetAddress localaddress;
     private InetAddress publicAddress;
     private String localIp="NotConfigured";
     private String publicIp="NotConfigured";
@@ -50,8 +49,9 @@ public class NetworkConfiguration {
     private void ScanNetworkLocalAddress(String networkInterface)
     {
         try {
-        	System.out.println("preferred iface");
-        	System.out.println(networkInterface);
+        	Logger.getLogger(MediaDeviceDetector.class.getName())
+            .log(Level.INFO, "Preferred network device: "+networkInterface);
+        	
                 NetworkInterface iface          
                     = NetworkInterface.getByName(networkInterface);
            

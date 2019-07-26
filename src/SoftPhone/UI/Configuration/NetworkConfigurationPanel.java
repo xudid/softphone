@@ -123,15 +123,13 @@ public class NetworkConfigurationPanel extends javax.swing.JPanel {
 	}
 
 	private void initComponents() {
-		System.out.println(getAlignmentX());
+		
 		setAlignmentX(LEFT_ALIGNMENT);
 		setAlignmentY(TOP_ALIGNMENT);
-		System.out.println(getAlignmentX());
 		this.selectPanel = new JPanel();
 		this.selectPanel.setBackground(Color.blue);
 		this.selectPanel.setAlignmentX(LEFT_ALIGNMENT);
 		this.selectPanel.setAlignmentY(TOP_ALIGNMENT);
-		System.out.println(selectPanel.getAlignmentY());
 		this.deviceComboBox = new JComboBox<String>(this.networkDeviceNames);
 		selectPanel.add(this.deviceComboBox);
 		selectPanel.setPreferredSize(deviceComboBox.getPreferredSize());
@@ -140,7 +138,7 @@ public class NetworkConfigurationPanel extends javax.swing.JPanel {
 		this.interfacepanel.setLayout(new BoxLayout(this.interfacepanel, BoxLayout.PAGE_AXIS));
 		this.interfacepanel.setAlignmentX(LEFT_ALIGNMENT);
 		this.interfacepanel.setAlignmentY(TOP_ALIGNMENT);
-		System.out.println(interfacepanel.getAlignmentX());
+		
 
 		this.messageLabel = new JLabel();
 		this.interfacepanel.add(messageLabel);

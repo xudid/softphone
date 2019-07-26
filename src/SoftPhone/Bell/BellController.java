@@ -19,79 +19,74 @@ import javax.sip.address.Address;
  *
  * @author didier
  */
-public class BellController implements SoftPhoneListener
-{
-    private Bell bell;
-    private Future<?> runningTask;
-    private ExecutorService backgroundExec=null;
-    public BellController(Bell bell)
+public class BellController implements SoftPhoneListener {
+	private Bell bell;
+	private Future<?> runningTask;
+	private ExecutorService backgroundExec = null;
+
+	public BellController(Bell bell) {
+		this.bell = bell;
+		backgroundExec = Executors.newCachedThreadPool();
+	}
+
+	private void ringing() {
+		if (runningTask == null) {
+			runningTask = backgroundExec.submit(new Runnable() {
+				public void run() {
+					bell.ring();
+				}
+			});
+		}
+	}
+	
+	private void tryringing() {
+		if (runningTask == null) {
+			runningTask = backgroundExec.submit(new Runnable() {
+				public void run() {
+					bell.tryring();
+				}
+			});
+		}
+	}
+
+	public void stopRinging() {
+		if (runningTask != null) {
+			runningTask.cancel(true);
+			runningTask = null;
+		}
+	}
+
+	public void processCallInProgress() {
+
+	}
+
+	public void processCallNok() {
+
+	}
+
+	public void processIncommingCall(InCallEvent ev) {
+		ringing();
+	}
+
+	public void processCallTryResponse(TryCallEvent ev)
     {
-        this.bell = bell;
-        backgroundExec =Executors.newCachedThreadPool();
+    	tryringing();
     }
 
-    private void ringing()
-    {
-         if(runningTask ==null)
-   {
-       runningTask=backgroundExec.submit(new Runnable()
-       {
-            public void run()
-            {
-               bell.ring();
-            }
-       });
-   }
-    }
+	public void processCallRingResponse(RingCallEvent ev) {
 
-   public  void stopRinging()
-    {
-        if(runningTask!=null)
-      {
-          runningTask.cancel(true);
-          runningTask=null;
-      }
-    }
+	}
 
-    public void processCallInProgress()
-    {
+	public void processCalloK(OKCallEvent ev) {
+		stopRinging();
+	}
 
-    }
+	public void processTerminateCallByRemotePart() {
+		stopRinging();
+	}
 
-    public void processCallNok()
-    {
+	public void processRegisterOK(Address address) {
 
-    }
-
-    public void processIncommingCall(InCallEvent ev)
-    {
-        ringing();
-    }
-
-    public void processCallTryResponse(TryCallEvent ev)
-    {
-
-    }
-
-    public void processCallRingResponse(RingCallEvent ev)
-    {
-
-    }
-
-    public void processCalloK(OKCallEvent ev)
-    {
-
-    }
-
-    public void processTerminateCallByRemotePart()
-    {
-
-    }
-
-    public void processRegisterOK(Address address)
-    {
-        
-    }
-
+	}
 
 }
