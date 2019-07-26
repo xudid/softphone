@@ -1,17 +1,17 @@
 <SipAccount>
   <credentials>
-    <userName>test</userName>
-    <password>titi</password>
+    <userName>1000</userName>
+    <password>mdp</password>
   </credentials>
-  <accountName>test</accountName>
-  <sipAddress>sip:test@192.168.0.3</sipAddress>
+  <accountName>1000</accountName>
+  <sipAddress>sip:1000@192.168.1.3</sipAddress>
   <proxy>
     <port>5060</port>
     <uri></uri>
   </proxy>
   <registrar>
-    <FullQualifiedDomainName>192.168.0.3</FullQualifiedDomainName>
-    <sipAddress>sip:192.168.0.3</sipAddress>
-    <port>5060</port>
+    <FullQualifiedDomainName>192.168.1.30</FullQualifiedDomainName>
+    <sipAddress>sip:192.168.1.30</sipAddress>
+    <port>5062</port>
   </registrar>
 </SipAccount>
