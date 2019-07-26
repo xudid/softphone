@@ -52,7 +52,7 @@ public class NetworkConfiguration {
         try {
         	System.out.println("preferred iface");
         	System.out.println(networkInterface);
-            NetworkInterface iface          
+                NetworkInterface iface          
                     = NetworkInterface.getByName(networkInterface);
            
            if(iface.isUp()){

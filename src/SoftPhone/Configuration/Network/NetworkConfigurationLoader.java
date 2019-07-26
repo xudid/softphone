@@ -42,8 +42,9 @@ public class NetworkConfigurationLoader
     {
     	String OS = System.getProperty("os.name").toLowerCase();
     	System.out.println(OS);
-    	netIfaceMap = new HashMap<>();
-        networkDevices=searchNetWorkInterfaces();
+    	networkDevices=searchNetWorkInterfaces();
+    	netIfaceMap = this.initNetworkIfacesMap();
+        
         networkDevicesNames =new String[0];
         Preferences root = Preferences.userRoot();
         if(root==null){System.out.println("userRoot node is null");}
@@ -110,38 +111,18 @@ public class NetworkConfigurationLoader
         
     }
     
-    public HashMap<String, NetworkIface> getNetworkIfacesMap(){
-    	if(netIfaceMap.size() ==0)
-        {
-           
-            String displayName="";
-            String name="";
-
-            while(networkDevices.hasMoreElements())
-                {
-            	NetworkInterface netIface =networkDevices.nextElement() ;
-            	NetworkIface iface = new NetworkIface();
-            	
-                name=netIface.getName();
-            	displayName=netIface.getDisplayName();
-            	iface.setName(name);
-            	iface.setDisplayName(displayName);
-            	
-            	 
-            	
-            	 if(netIface.getParent()==null){
-            		 System.out.println("physical iface");
-            		 
-            	 }
-            	if(netIface.isVirtual()==true){
-            		System.out.println("virtual iface");
-            	}
-            	try {
-            		if(netIface.getHardwareAddress()!=null){
+    public HashMap<String, NetworkIface>initNetworkIfacesMap() {
+    	HashMap<String,NetworkIface>  map = new HashMap<String,NetworkIface>();
+    	while(this.networkDevices.hasMoreElements()) 
+    	{
+    		NetworkInterface netIface =networkDevices.nextElement() ;
+        	NetworkIface iface = new NetworkIface();
+        	iface.setName(netIface.getName());
+        	iface.setDisplayName(netIface.getDisplayName());
+        	
+        	try {
+        		if(netIface.getHardwareAddress()!=null){
             		byte[] mac = netIface.getHardwareAddress();
-            		 
-            		
-             
             		StringBuilder sb = new StringBuilder();
             		for (int i = 0; i < mac.length; i++) {
             			sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));		
@@ -149,25 +130,42 @@ public class NetworkConfigurationLoader
             		String macAddress = sb.toString();
             		iface.setHWAddress(macAddress);
             		
-            		}
+            		if(netIface.getParent()==null)
+            		{
+               		 iface.setDeviceType("Physical");
+               		 }
+	               	if(netIface.isVirtual()==true)
+	               	{
+	               		iface.setDeviceType("Virtual");
+	               	}
+	               	if(netIface.isLoopback())
+	               	{
+           			  iface.setLoopback(true);
+           			}
+					if(netIface.isPointToPoint())
+					{
+						iface.setDeviceType("Point to Point");
+					}
             		
-            		 if(netIface.isLoopback()){
-            			 System.out.println("loopback iface");
-            			 }
-					if(netIface.isPointToPoint()){
-						System.out.println("point to point iface");
-						}
-				} catch (SocketException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                    netIfaceMap.put(displayName, iface);
-
-                }
-           
-          return netIfaceMap;
-        }
-        else return netIfaceMap;
+            		}
+        		
+        	}catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	if (iface.getDeviceType().equalsIgnoreCase("physical"))
+        	{
+        		map.put(iface.getDisplayName(), iface);
+        	}
+        	
+        	
+    	}
+    	return map;
+    }
+    
+    public HashMap<String, NetworkIface> getNetworkIfacesMap(){
+    	
+                    return this.netIfaceMap;
     }
 
     private Enumeration<NetworkInterface> searchNetWorkInterfaces()
@@ -188,6 +186,18 @@ public class NetworkConfigurationLoader
                 return devices;
             }
 
+    }
+    
+    public NetworkIface getNetworkIfaceByName(String name)
+    {
+    	NetworkIface iface = null;
+    	
+    	if (this.netIfaceMap.containsKey(name))
+    	{
+    		iface = this.netIfaceMap.get(name);
+    	}
+    	
+    	return iface;
     }
 
     public Enumeration<NetworkInterface> getNetworkDevices()

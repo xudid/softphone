@@ -162,7 +162,7 @@ public class Main
                 }
             }
 
-
+            /*Stun protocol disabled*/
            // networkConfiguration.initPublicAddressAndNAT();
 
             soundConfigurationLoader =new AudioConfigurationLoader(generalConfiguration.getPrefferedPath());

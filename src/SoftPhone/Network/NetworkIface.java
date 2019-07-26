@@ -1,5 +1,12 @@
 package SoftPhone.Network;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
 public class NetworkIface {
 	private String DisplayName="";
 	private String Name="";
@@ -7,7 +14,24 @@ public class NetworkIface {
 	private boolean status=false;
 	private String IPAddress="";
 	private boolean isLoopback=false;
+	private String deviceType="undefined";
 	
+	public boolean isLoopback() {
+		return isLoopback;
+	}
+
+	public void setLoopback(boolean isLoopback) {
+		this.isLoopback = isLoopback;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
+	}
+
 	public NetworkIface() {
 		
 	}
@@ -51,8 +75,25 @@ public class NetworkIface {
 		this.status = status;
 	}
 
-	public String getIPAddress() {
-		return IPAddress;
+	public String[] getIPAddress() {
+		List<String> ipAdresses = new ArrayList<String>();
+		
+		NetworkInterface iface;
+		try {
+			iface = NetworkInterface.getByName(Name);
+			Enumeration ipAdressesEnumeration = iface.getInetAddresses();
+		    while (ipAdressesEnumeration.hasMoreElements())
+		    {
+		        InetAddress ip = (InetAddress) ipAdressesEnumeration.nextElement();
+		        ipAdresses.add(ip.getHostAddress());
+		    }
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String[] ipArray = new String[ ipAdresses.size() ];
+		ipAdresses.toArray( ipArray );
+		return ipArray;
 	}
 
 	public void setIPAddress(String iPAddress) {
